@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/clipboardjs-tile.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kishlay_012.ClipVault"
     },
     "web": {
       "bundler": "metro",
@@ -38,6 +39,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8f0cdb21-1f2b-4571-8b78-f088db615b0b"
+      }
     }
   }
 }
