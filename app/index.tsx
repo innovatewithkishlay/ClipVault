@@ -3,7 +3,16 @@ import * as Clipboard from "expo-clipboard";
 import { useFocusEffect } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
-import { IconButton, List, Searchbar, useTheme } from "react-native-paper";
+import {
+  Button,
+  Dialog,
+  IconButton,
+  List,
+  Paragraph,
+  Portal,
+  Searchbar,
+  useTheme,
+} from "react-native-paper";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -19,6 +28,7 @@ export default function HomeScreen() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const insets = useSafeAreaInsets();
   const clipsRef = useRef(clips);
+  const [deleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
 
   useEffect(() => {
     clipsRef.current = clips;
@@ -180,15 +190,17 @@ export default function HomeScreen() {
             {
               bottom: 24 + insets.bottom,
               left: 24,
-              backgroundColor: theme.colors.surface, // Improved background
-              borderWidth: 1, // Added border
-              borderColor: theme.colors.outline, // Border color
+              backgroundColor: theme.colors.surface,
+              borderWidth: 1,
+              borderColor: theme.colors.outline,
             },
           ]}
           size={32}
-          iconColor={theme.colors.primary} // Improved color
+          iconColor={theme.colors.primary}
           onPress={handleImportClipboard}
           mode="contained"
+          tooltip="Import clipboard" // Tooltip for long press
+          accessibilityLabel="Import clipboard"
         />
 
         {clips.length > 0 && (
@@ -199,17 +211,48 @@ export default function HomeScreen() {
               {
                 bottom: 24 + insets.bottom,
                 right: 24,
-                backgroundColor: theme.colors.surface, // Improved background
-                borderWidth: 1, // Added border
-                borderColor: theme.colors.outline, // Border color
+                backgroundColor: theme.colors.surface,
+                borderWidth: 1,
+                borderColor: theme.colors.outline,
               },
             ]}
             size={32}
-            iconColor={theme.colors.error} // Keep error color
-            onPress={handleClearAll}
+            iconColor={theme.colors.error}
+            onPress={() => setDeleteAllDialogVisible(true)}
             mode="contained"
+            tooltip="Delete all clips" // Tooltip for long press
+            accessibilityLabel="Delete all clips"
           />
         )}
+
+        {/* Delete All Confirmation Dialog */}
+        <Portal>
+          <Dialog
+            visible={deleteAllDialogVisible}
+            onDismiss={() => setDeleteAllDialogVisible(false)}
+          >
+            <Dialog.Title>Delete All?</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>
+                Are you sure you want to delete all clipboard items?
+              </Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => setDeleteAllDialogVisible(false)}>
+                Cancel
+              </Button>
+              <Button
+                onPress={() => {
+                  handleClearAll();
+                  setDeleteAllDialogVisible(false);
+                }}
+                textColor={theme.colors.error}
+              >
+                Delete
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
     </SafeAreaView>
   );
