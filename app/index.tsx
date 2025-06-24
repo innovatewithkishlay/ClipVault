@@ -180,11 +180,13 @@ export default function HomeScreen() {
             {
               bottom: 24 + insets.bottom,
               left: 24,
-              backgroundColor: theme.colors.elevation.level3,
+              backgroundColor: theme.colors.surface, // Improved background
+              borderWidth: 1, // Added border
+              borderColor: theme.colors.outline, // Border color
             },
           ]}
           size={32}
-          iconColor={theme.colors.onPrimary}
+          iconColor={theme.colors.primary} // Improved color
           onPress={handleImportClipboard}
           mode="contained"
         />
@@ -197,11 +199,13 @@ export default function HomeScreen() {
               {
                 bottom: 24 + insets.bottom,
                 right: 24,
-                backgroundColor: theme.colors.elevation.level3,
+                backgroundColor: theme.colors.surface, // Improved background
+                borderWidth: 1, // Added border
+                borderColor: theme.colors.outline, // Border color
               },
             ]}
             size={32}
-            iconColor={theme.colors.onPrimary}
+            iconColor={theme.colors.error} // Keep error color
             onPress={handleClearAll}
             mode="contained"
           />
