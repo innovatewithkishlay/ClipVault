@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Clipboard from "expo-clipboard";
 import { useFocusEffect } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { IconButton, List, Searchbar, useTheme } from "react-native-paper";
 import {
@@ -18,6 +18,11 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const insets = useSafeAreaInsets();
+  const clipsRef = useRef(clips);
+
+  useEffect(() => {
+    clipsRef.current = clips;
+  }, [clips]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -26,7 +31,7 @@ export default function HomeScreen() {
       return () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
       };
-    }, [clips])
+    }, [])
   );
 
   const loadClips = async () => {
@@ -47,18 +52,34 @@ export default function HomeScreen() {
       if (
         content &&
         content.trim() !== "" &&
-        !clips.some((clip) => clip.text === content)
+        !clipsRef.current.some((clip) => clip.text === content)
       ) {
         const newClip = {
           id: Date.now().toString(),
           text: content,
           timestamp: new Date().toISOString(),
         };
-        const updatedClips = [newClip, ...clips];
+        const updatedClips = [newClip, ...clipsRef.current];
         setClips(updatedClips);
         await AsyncStorage.setItem(CLIPBOARD_KEY, JSON.stringify(updatedClips));
       }
     }, 2000);
+  };
+
+  const handleImportClipboard = async () => {
+    const content = await Clipboard.getStringAsync();
+    if (content && content.trim() !== "") {
+      if (!clipsRef.current.some((clip) => clip.text === content)) {
+        const newClip = {
+          id: Date.now().toString(),
+          text: content,
+          timestamp: new Date().toISOString(),
+        };
+        const updatedClips = [newClip, ...clipsRef.current];
+        setClips(updatedClips);
+        await AsyncStorage.setItem(CLIPBOARD_KEY, JSON.stringify(updatedClips));
+      }
+    }
   };
 
   const handleCopy = async (text: string) => {
@@ -152,6 +173,22 @@ export default function HomeScreen() {
           />
         )}
 
+        <IconButton
+          icon="clipboard-arrow-down"
+          style={[
+            styles.importFab,
+            {
+              bottom: 24 + insets.bottom,
+              left: 24,
+              backgroundColor: theme.colors.elevation.level3,
+            },
+          ]}
+          size={32}
+          iconColor={theme.colors.onPrimary}
+          onPress={handleImportClipboard}
+          mode="contained"
+        />
+
         {clips.length > 0 && (
           <IconButton
             icon="delete"
@@ -159,6 +196,7 @@ export default function HomeScreen() {
               styles.fab,
               {
                 bottom: 24 + insets.bottom,
+                right: 24,
                 backgroundColor: theme.colors.elevation.level3,
               },
             ]}
@@ -202,7 +240,11 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    right: 24,
+    elevation: 4,
+    borderRadius: 28,
+  },
+  importFab: {
+    position: "absolute",
     elevation: 4,
     borderRadius: 28,
   },
