@@ -4,6 +4,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import { ThemeProvider, useThemeContext } from "../utils/ThemeContext";
 
+export const unstable_settings = {
+  initialRouteName: "index",
+};
+
 export default function RootLayout() {
   return (
     <ThemeProvider>
@@ -20,12 +24,23 @@ function AppWithTheme() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Drawer
           screenOptions={{
-            drawerActiveTintColor: "#6200ee",
+            drawerActiveTintColor: theme.colors.primary,
+            drawerInactiveTintColor: theme.colors.onBackground,
             drawerLabelStyle: { fontSize: 16 },
-            headerStyle: { backgroundColor: theme.colors.background },
+            headerStyle: {
+              backgroundColor:
+                theme.colors.elevation?.level2 || theme.colors.background,
+            },
             headerTitleStyle: {
               fontWeight: "bold",
               color: theme.colors.onBackground,
+            },
+            headerTintColor: theme.colors.onBackground,
+            drawerStyle: {
+              backgroundColor: theme.colors.background,
+            },
+            drawerItemStyle: {
+              backgroundColor: "transparent",
             },
           }}
         >
