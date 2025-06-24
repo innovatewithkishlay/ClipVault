@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   Animated,
   Easing,
-  Image,
   ScrollView,
   StyleSheet,
   Switch,
@@ -296,7 +295,6 @@ export default function SettingsScreen() {
           </View>
         </List.Section>
 
-        {/* About Me Section */}
         <View
           style={[
             styles.aboutCard,
@@ -310,13 +308,6 @@ export default function SettingsScreen() {
             Meet the Developer
           </Text>
           <View style={styles.aboutRow}>
-            <View style={styles.avatarWrap}>
-              <Image
-                source={require("../assets/images/kishlay.png")}
-                style={styles.avatar}
-                resizeMode="cover"
-              />
-            </View>
             <View style={styles.aboutTextWrap}>
               <Text
                 style={[styles.aboutName, { color: theme.colors.onBackground }]}
