@@ -79,8 +79,6 @@ export default function PinScreen() {
         <View style={styles.logoContainer}>
           <ClipVaultLogo style={styles.logo} />
         </View>
-        <Text style={styles.welcome}>Welcome to</Text>
-        <Text style={styles.appName}>ClipVault</Text>
         <Card style={styles.card} elevation={0}>
           <Card.Content>
             <Text style={styles.title}>
