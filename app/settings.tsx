@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   Animated,
   Easing,
+  Image,
   ScrollView,
   StyleSheet,
   Switch,
@@ -295,6 +296,54 @@ export default function SettingsScreen() {
           </View>
         </List.Section>
 
+        {/* About Me Section */}
+        <View
+          style={[
+            styles.aboutCard,
+            {
+              backgroundColor:
+                theme.colors.elevation?.level2 || theme.colors.surface,
+            },
+          ]}
+        >
+          <Text style={[styles.aboutHeader, { color: theme.colors.primary }]}>
+            Meet the Developer
+          </Text>
+          <View style={styles.aboutRow}>
+            <View style={styles.avatarWrap}>
+              <Image
+                source={require("../assets/images/kishlay.png")}
+                style={styles.avatar}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.aboutTextWrap}>
+              <Text
+                style={[styles.aboutName, { color: theme.colors.onBackground }]}
+              >
+                Kishlay Kumar
+              </Text>
+              <Text
+                style={[
+                  styles.aboutTitle,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                CS Undergrad · Full Stack Developer
+              </Text>
+              <Text
+                style={[
+                  styles.aboutDesc,
+                  { color: theme.colors.onSurfaceVariant },
+                ]}
+              >
+                Passionate about web & mobile apps, MERN stack, and scalable
+                systems.
+              </Text>
+            </View>
+          </View>
+        </View>
+
         <Button
           mode="outlined"
           onPress={handleLogout}
@@ -314,9 +363,9 @@ export default function SettingsScreen() {
         action={{
           label: "Confirm",
           onPress: confirmLogout,
-          textColor: theme.colors.onError,
+          textColor: "#fff",
         }}
-        style={{ backgroundColor: theme.colors.error }}
+        style={styles.snackbar}
       >
         Are you sure you want to logout?
       </Snackbar>
@@ -402,5 +451,62 @@ const styles = StyleSheet.create({
   logoutButton: {
     marginTop: 20,
     borderRadius: 8,
+  },
+  snackbar: {
+    backgroundColor: "#323232",
+    marginBottom: 20,
+  },
+
+  // About Me Styles
+  aboutCard: {
+    borderRadius: 14,
+    marginBottom: 24,
+    padding: 16,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 3,
+  },
+  aboutHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  aboutRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatarWrap: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: "hidden",
+    marginRight: 16,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  aboutTextWrap: {
+    flex: 1,
+  },
+  aboutName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  aboutTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  aboutDesc: {
+    fontSize: 13,
+    marginTop: 4,
   },
 });
