@@ -1,7 +1,14 @@
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
-import { Animated, Easing, StyleSheet, Switch, View } from "react-native";
+import {
+  Animated,
+  Easing,
+  SafeAreaView,
+  StyleSheet,
+  Switch,
+  View,
+} from "react-native";
 import {
   Button,
   IconButton,
@@ -77,139 +84,165 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
-      <List.Section>
-        <List.Subheader style={styles.sectionHeader}>Appearance</List.Subheader>
-        <View style={styles.card}>
-          <List.Item
-            title="Dark Mode"
-            titleStyle={styles.listTitle}
-            right={() => (
-              <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
-                thumbColor={darkMode ? theme.colors.primary : "#f4f3f4"}
-                trackColor={{ false: "#767577", true: theme.colors.primary }}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.outer}>
+        <View style={styles.content}>
+          <List.Section>
+            <List.Subheader style={styles.sectionHeader}>
+              Appearance
+            </List.Subheader>
+            <View style={styles.card}>
+              <List.Item
+                title="Dark Mode"
+                titleStyle={styles.listTitle}
+                right={() => (
+                  <Switch
+                    value={darkMode}
+                    onValueChange={setDarkMode}
+                    thumbColor={darkMode ? theme.colors.primary : "#f4f3f4"}
+                    trackColor={{
+                      false: "#767577",
+                      true: theme.colors.primary,
+                    }}
+                  />
+                )}
               />
-            )}
-          />
-        </View>
-      </List.Section>
+            </View>
+          </List.Section>
 
-      <List.Section>
-        <List.Subheader style={styles.sectionHeader}>Security</List.Subheader>
-        <View style={styles.card}>
-          <List.Item
-            title="Change PIN"
-            description="Set a new 4-digit PIN"
-            titleStyle={styles.listTitle}
-            descriptionStyle={styles.listDescription}
-            left={(props) => (
-              <List.Icon {...props} icon="lock" color={theme.colors.primary} />
-            )}
-          />
-          <View style={styles.pinContainer}>
-            <Text style={styles.label}>New PIN</Text>
-            <TextInput
-              secureTextEntry={!showPin}
-              keyboardType="number-pad"
-              maxLength={4}
-              value={pin}
-              onChangeText={setPin}
-              style={styles.pinInput}
-              mode="outlined"
-              placeholder="Enter new PIN"
-              right={
-                <TextInput.Icon
-                  icon={showPin ? "eye-off" : "eye"}
-                  onPress={() => setShowPin(!showPin)}
+          <List.Section>
+            <List.Subheader style={styles.sectionHeader}>
+              Security
+            </List.Subheader>
+            <View style={styles.card}>
+              <List.Item
+                title="Change PIN"
+                description="Set a new 4-digit PIN"
+                titleStyle={styles.listTitle}
+                descriptionStyle={styles.listDescription}
+                left={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon="lock"
+                    color={theme.colors.primary}
+                  />
+                )}
+              />
+              <View style={styles.pinContainer}>
+                <Text style={styles.label}>New PIN</Text>
+                <TextInput
+                  secureTextEntry={!showPin}
+                  keyboardType="number-pad"
+                  maxLength={4}
+                  value={pin}
+                  onChangeText={setPin}
+                  style={styles.pinInput}
+                  mode="outlined"
+                  placeholder="Enter new PIN"
+                  right={
+                    <TextInput.Icon
+                      icon={showPin ? "eye-off" : "eye"}
+                      onPress={() => setShowPin(!showPin)}
+                    />
+                  }
+                  outlineColor={theme.colors.outline}
+                  activeOutlineColor={theme.colors.primary}
                 />
-              }
-              outlineColor={theme.colors.outline}
-              activeOutlineColor={theme.colors.primary}
-            />
-            <Text style={styles.label}>Confirm PIN</Text>
-            <TextInput
-              secureTextEntry={!showConfirmPin}
-              keyboardType="number-pad"
-              maxLength={4}
-              value={confirmPin}
-              onChangeText={setConfirmPin}
-              style={styles.pinInput}
-              mode="outlined"
-              placeholder="Confirm new PIN"
-              right={
-                <TextInput.Icon
-                  icon={showConfirmPin ? "eye-off" : "eye"}
-                  onPress={() => setShowConfirmPin(!showConfirmPin)}
+                <Text style={styles.label}>Confirm PIN</Text>
+                <TextInput
+                  secureTextEntry={!showConfirmPin}
+                  keyboardType="number-pad"
+                  maxLength={4}
+                  value={confirmPin}
+                  onChangeText={setConfirmPin}
+                  style={styles.pinInput}
+                  mode="outlined"
+                  placeholder="Confirm new PIN"
+                  right={
+                    <TextInput.Icon
+                      icon={showConfirmPin ? "eye-off" : "eye"}
+                      onPress={() => setShowConfirmPin(!showConfirmPin)}
+                    />
+                  }
+                  outlineColor={theme.colors.outline}
+                  activeOutlineColor={theme.colors.primary}
                 />
-              }
-              outlineColor={theme.colors.outline}
-              activeOutlineColor={theme.colors.primary}
-            />
-            {error ? (
-              <View style={styles.errorContainer}>
-                <IconButton icon="alert-circle" size={16} iconColor="#ff5252" />
-                <Text style={styles.error}>{error}</Text>
+                {error ? (
+                  <View style={styles.errorContainer}>
+                    <IconButton
+                      icon="alert-circle"
+                      size={16}
+                      iconColor="#ff5252"
+                    />
+                    <Text style={styles.error}>{error}</Text>
+                  </View>
+                ) : null}
+                {successMessage ? (
+                  <Animated.View
+                    style={[styles.successContainer, { opacity: fadeAnim }]}
+                  >
+                    <IconButton
+                      icon="check-circle"
+                      size={16}
+                      iconColor="#4caf50"
+                    />
+                    <Text style={styles.success}>{successMessage}</Text>
+                  </Animated.View>
+                ) : null}
+                <Button
+                  mode="contained"
+                  onPress={handleChangePin}
+                  style={styles.button}
+                  contentStyle={styles.buttonContent}
+                  labelStyle={styles.buttonLabel}
+                  disabled={pin.length !== 4 || confirmPin.length !== 4}
+                >
+                  Update PIN
+                </Button>
               </View>
-            ) : null}
-            {successMessage ? (
-              <Animated.View
-                style={[styles.successContainer, { opacity: fadeAnim }]}
-              >
-                <IconButton icon="check-circle" size={16} iconColor="#4caf50" />
-                <Text style={styles.success}>{successMessage}</Text>
-              </Animated.View>
-            ) : null}
-            <Button
-              mode="contained"
-              onPress={handleChangePin}
-              style={styles.button}
-              contentStyle={styles.buttonContent}
-              labelStyle={styles.buttonLabel}
-              disabled={pin.length !== 4 || confirmPin.length !== 4}
-            >
-              Update PIN
-            </Button>
-          </View>
+            </View>
+          </List.Section>
         </View>
-      </List.Section>
-
-      <Button
-        mode="outlined"
-        onPress={handleLogout}
-        style={styles.logoutButton}
-        textColor="#ff5252"
-        contentStyle={styles.buttonContent}
-        labelStyle={styles.buttonLabel}
-      >
-        Logout
-      </Button>
-
-      <Snackbar
-        visible={snackVisible}
-        onDismiss={() => setSnackVisible(false)}
-        duration={5000}
-        action={{
-          label: "Confirm",
-          onPress: confirmLogout,
-          textColor: "#fff",
-        }}
-        style={styles.snackbar}
-      >
-        Are you sure you want to logout?
-      </Snackbar>
-    </View>
+        <Button
+          mode="outlined"
+          onPress={handleLogout}
+          style={styles.logoutButton}
+          textColor="#ff5252"
+          contentStyle={styles.buttonContent}
+          labelStyle={styles.buttonLabel}
+        >
+          Logout
+        </Button>
+        <Snackbar
+          visible={snackVisible}
+          onDismiss={() => setSnackVisible(false)}
+          duration={5000}
+          action={{
+            label: "Confirm",
+            onPress: confirmLogout,
+            textColor: "#fff",
+          }}
+          style={styles.snackbar}
+        >
+          Are you sure you want to logout?
+        </Snackbar>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
+    backgroundColor: "#fff",
+  },
+  outer: {
+    flex: 1,
+    justifyContent: "space-between",
     padding: 16,
-    paddingBottom: 48,
+  },
+  content: {
+    flexGrow: 1,
   },
   sectionHeader: {
     fontSize: 14,
@@ -287,7 +320,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderColor: "#ff5252",
     borderRadius: 8,
-    marginBottom: 28,
+    marginBottom: 36,
   },
   snackbar: {
     backgroundColor: "#323232",
