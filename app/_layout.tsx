@@ -9,8 +9,17 @@ export default function RootLayout() {
         screenOptions={{
           drawerActiveTintColor: "#6200ee",
           drawerLabelStyle: { fontSize: 16 },
+          headerStyle: { backgroundColor: "#fff" },
+          headerTitleStyle: { fontWeight: "bold" },
         }}
       >
+        <Drawer.Screen
+          name="pin"
+          options={{
+            drawerItemStyle: { display: "none" },
+            headerShown: false,
+          }}
+        />
         <Drawer.Screen
           name="index"
           options={{
