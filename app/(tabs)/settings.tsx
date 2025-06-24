@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
 import { StyleSheet, Switch, View } from "react-native";
-import { Button, List, Text, useTheme } from "react-native-paper";
+import { Button, List, Text, TextInput, useTheme } from "react-native-paper";
 
 const PIN_KEY = "CLIPVAULT_PIN";
 
@@ -49,7 +49,8 @@ export default function SettingsScreen() {
             <Switch
               value={darkMode}
               onValueChange={setDarkMode}
-              color={theme.colors.primary}
+              thumbColor={darkMode ? theme.colors.primary : "#f4f3f4"}
+              trackColor={{ false: "#767577", true: theme.colors.primary }}
             />
           )}
         />
@@ -71,6 +72,8 @@ export default function SettingsScreen() {
             value={pin}
             onChangeText={setPin}
             style={styles.pinInput}
+            mode="outlined"
+            placeholder="Enter new PIN"
           />
 
           <Text style={styles.label}>Confirm PIN:</Text>
@@ -81,6 +84,8 @@ export default function SettingsScreen() {
             value={confirmPin}
             onChangeText={setConfirmPin}
             style={styles.pinInput}
+            mode="outlined"
+            placeholder="Confirm new PIN"
           />
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
