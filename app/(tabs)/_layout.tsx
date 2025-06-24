@@ -6,7 +6,24 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "#6200ee",
-        tabBarStyle: { paddingBottom: 5, height: 60 },
+        tabBarStyle: {
+          position: "absolute",
+          left: 16,
+          right: 16,
+          bottom: 24,
+          borderRadius: 16,
+          height: 60,
+          backgroundColor: "#fff",
+          elevation: 8,
+          shadowColor: "#000",
+          shadowOpacity: 0.1,
+          shadowOffset: { width: 0, height: 2 },
+          shadowRadius: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginBottom: 4,
+        },
       }}
     >
       <Tabs.Screen
@@ -24,6 +41,15 @@ export default function TabLayout() {
           title: "Settings",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="settings" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: "Explore",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="explore" size={24} color={color} />
           ),
         }}
       />
