@@ -10,6 +10,7 @@ import {
   TextInput,
   useTheme,
 } from "react-native-paper";
+import ClipVaultLogo from "../assets/images/ClipVaultLogo";
 
 const PIN_KEY = "CLIPVAULT_PIN";
 
@@ -52,6 +53,7 @@ export default function PinScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.centerContainer}>
+        <ClipVaultLogo style={styles.logo} />
         <Text style={styles.welcome}>Welcome to</Text>
         <Text style={styles.appName}>ClipVault</Text>
         <Card style={styles.card} elevation={4}>
@@ -113,10 +115,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   logo: {
-    width: 64,
-    height: 64,
+    width: 120,
+    height: 120,
     marginBottom: 16,
-    borderRadius: 16,
   },
   welcome: {
     fontSize: 20,
