@@ -33,13 +33,13 @@ export default function PinScreen() {
     if (!storedPin) {
       if (pin.length === 4) {
         await SecureStore.setItemAsync(PIN_KEY, pin);
-        router.replace("/(tabs)");
+        router.replace("/");
       } else {
         setError("PIN must be 4 digits");
       }
     } else {
       if (pin === storedPin) {
-        router.replace("/(tabs)");
+        router.replace("/");
       } else {
         setError("Incorrect PIN");
       }
