@@ -1,27 +1,37 @@
-import { Stack } from "expo-router";
-import { useColorScheme } from "react-native";
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Drawer } from "expo-router/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
-  const theme = colorScheme === "dark" ? MD3DarkTheme : MD3LightTheme;
-
-  const customTheme = {
-    ...theme,
-    colors: {
-      ...theme.colors,
-      primary: "#6200ee",
-      background: colorScheme === "dark" ? "#121212" : "#f5f5f5",
-    },
-  };
-
   return (
-    <PaperProvider theme={customTheme}>
-      <Stack>
-        <Stack.Screen name="pin" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </PaperProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer
+        screenOptions={{
+          drawerActiveTintColor: "#6200ee",
+          drawerLabelStyle: { fontSize: 16 },
+        }}
+      >
+        <Drawer.Screen
+          name="index"
+          options={{
+            drawerLabel: "Clipboard",
+            title: "ClipVault",
+            drawerIcon: ({ color, size }) => (
+              <MaterialIcons name="content-paste" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="settings"
+          options={{
+            drawerLabel: "Settings",
+            title: "ClipVault",
+            drawerIcon: ({ color, size }) => (
+              <MaterialIcons name="settings" size={size} color={color} />
+            ),
+          }}
+        />
+      </Drawer>
+    </GestureHandlerRootView>
   );
 }
