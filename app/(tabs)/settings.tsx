@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
-import { Animated, Easing, StyleSheet, View } from "react-native";
+import { Animated, Easing, StyleSheet, Switch, View } from "react-native";
 import {
   Button,
   IconButton,
@@ -35,7 +35,6 @@ export default function SettingsScreen() {
         easing: Easing.ease,
         useNativeDriver: true,
       }).start();
-
       const timer = setTimeout(() => {
         setSuccessMessage("");
         Animated.timing(fadeAnim, {
@@ -44,24 +43,20 @@ export default function SettingsScreen() {
           useNativeDriver: true,
         }).start();
       }, 3000);
-
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
 
   const handleChangePin = async () => {
     setError("");
-
     if (pin.length !== 4) {
       setError("PIN must be 4 digits");
       return;
     }
-
     if (pin !== confirmPin) {
       setError("PINs do not match");
       return;
     }
-
     try {
       await SecureStore.setItemAsync(PIN_KEY, pin);
       setSuccessMessage("PIN updated successfully!");
@@ -115,7 +110,6 @@ export default function SettingsScreen() {
               <List.Icon {...props} icon="lock" color={theme.colors.primary} />
             )}
           />
-
           <View style={styles.pinContainer}>
             <Text style={styles.label}>New PIN</Text>
             <TextInput
@@ -136,7 +130,6 @@ export default function SettingsScreen() {
               outlineColor={theme.colors.outline}
               activeOutlineColor={theme.colors.primary}
             />
-
             <Text style={styles.label}>Confirm PIN</Text>
             <TextInput
               secureTextEntry={!showConfirmPin}
@@ -156,14 +149,12 @@ export default function SettingsScreen() {
               outlineColor={theme.colors.outline}
               activeOutlineColor={theme.colors.primary}
             />
-
             {error ? (
               <View style={styles.errorContainer}>
                 <IconButton icon="alert-circle" size={16} iconColor="#ff5252" />
                 <Text style={styles.error}>{error}</Text>
               </View>
             ) : null}
-
             {successMessage ? (
               <Animated.View
                 style={[styles.successContainer, { opacity: fadeAnim }]}
@@ -172,7 +163,6 @@ export default function SettingsScreen() {
                 <Text style={styles.success}>{successMessage}</Text>
               </Animated.View>
             ) : null}
-
             <Button
               mode="contained"
               onPress={handleChangePin}
