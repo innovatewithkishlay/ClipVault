@@ -90,7 +90,10 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
+      edges={["bottom", "left", "right"]}
+    >
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={[
@@ -100,13 +103,29 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <List.Section>
-          <List.Subheader style={styles.sectionHeader}>
+          <List.Subheader
+            style={[
+              styles.sectionHeader,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
             Appearance
           </List.Subheader>
-          <View style={styles.card}>
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor:
+                  theme.colors.elevation?.level2 || theme.colors.surface,
+              },
+            ]}
+          >
             <List.Item
               title="Dark Mode"
-              titleStyle={styles.listTitle}
+              titleStyle={[
+                styles.listTitle,
+                { color: theme.colors.onBackground },
+              ]}
               right={() => (
                 <Switch
                   value={isDark}
@@ -120,13 +139,34 @@ export default function SettingsScreen() {
         </List.Section>
 
         <List.Section>
-          <List.Subheader style={styles.sectionHeader}>Security</List.Subheader>
-          <View style={styles.card}>
+          <List.Subheader
+            style={[
+              styles.sectionHeader,
+              { color: theme.colors.onSurfaceVariant },
+            ]}
+          >
+            Security
+          </List.Subheader>
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor:
+                  theme.colors.elevation?.level2 || theme.colors.surface,
+              },
+            ]}
+          >
             <List.Item
               title="Change PIN"
               description="Set a new 4-digit PIN"
-              titleStyle={styles.listTitle}
-              descriptionStyle={styles.listDescription}
+              titleStyle={[
+                styles.listTitle,
+                { color: theme.colors.onBackground },
+              ]}
+              descriptionStyle={[
+                styles.listDescription,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
               left={(props) => (
                 <List.Icon
                   {...props}
@@ -136,38 +176,58 @@ export default function SettingsScreen() {
               )}
             />
             <View style={styles.pinContainer}>
-              <Text style={styles.label}>New PIN</Text>
+              <Text
+                style={[styles.label, { color: theme.colors.onBackground }]}
+              >
+                New PIN
+              </Text>
               <TextInput
                 secureTextEntry={!showPin}
                 keyboardType="number-pad"
                 maxLength={4}
                 value={pin}
                 onChangeText={setPin}
-                style={styles.pinInput}
+                style={[
+                  styles.pinInput,
+                  { backgroundColor: theme.colors.surface },
+                ]}
                 mode="outlined"
                 placeholder="Enter new PIN"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
+                textColor={theme.colors.onSurface}
                 right={
                   <TextInput.Icon
                     icon={showPin ? "eye-off" : "eye"}
+                    color={theme.colors.onSurfaceVariant}
                     onPress={() => setShowPin(!showPin)}
                   />
                 }
                 outlineColor={theme.colors.outline}
                 activeOutlineColor={theme.colors.primary}
               />
-              <Text style={styles.label}>Confirm PIN</Text>
+              <Text
+                style={[styles.label, { color: theme.colors.onBackground }]}
+              >
+                Confirm PIN
+              </Text>
               <TextInput
                 secureTextEntry={!showConfirmPin}
                 keyboardType="number-pad"
                 maxLength={4}
                 value={confirmPin}
                 onChangeText={setConfirmPin}
-                style={styles.pinInput}
+                style={[
+                  styles.pinInput,
+                  { backgroundColor: theme.colors.surface },
+                ]}
                 mode="outlined"
                 placeholder="Confirm new PIN"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
+                textColor={theme.colors.onSurface}
                 right={
                   <TextInput.Icon
                     icon={showConfirmPin ? "eye-off" : "eye"}
+                    color={theme.colors.onSurfaceVariant}
                     onPress={() => setShowConfirmPin(!showConfirmPin)}
                   />
                 }
@@ -175,25 +235,50 @@ export default function SettingsScreen() {
                 activeOutlineColor={theme.colors.primary}
               />
               {error ? (
-                <View style={styles.errorContainer}>
+                <View
+                  style={[
+                    styles.errorContainer,
+                    { backgroundColor: theme.colors.errorContainer },
+                  ]}
+                >
                   <IconButton
                     icon="alert-circle"
                     size={16}
-                    iconColor="#ff5252"
+                    iconColor={theme.colors.error}
                   />
-                  <Text style={styles.error}>{error}</Text>
+                  <Text
+                    style={[
+                      styles.error,
+                      { color: theme.colors.onErrorContainer },
+                    ]}
+                  >
+                    {error}
+                  </Text>
                 </View>
               ) : null}
               {successMessage ? (
                 <Animated.View
-                  style={[styles.successContainer, { opacity: fadeAnim }]}
+                  style={[
+                    styles.successContainer,
+                    {
+                      backgroundColor: theme.colors.primaryContainer,
+                      opacity: fadeAnim,
+                    },
+                  ]}
                 >
                   <IconButton
                     icon="check-circle"
                     size={16}
-                    iconColor="#4caf50"
+                    iconColor={theme.colors.onPrimaryContainer}
                   />
-                  <Text style={styles.success}>{successMessage}</Text>
+                  <Text
+                    style={[
+                      styles.success,
+                      { color: theme.colors.onPrimaryContainer },
+                    ]}
+                  >
+                    {successMessage}
+                  </Text>
                 </Animated.View>
               ) : null}
               <Button
@@ -213,8 +298,8 @@ export default function SettingsScreen() {
         <Button
           mode="outlined"
           onPress={handleLogout}
-          style={styles.logoutButton}
-          textColor="#ff5252"
+          style={[styles.logoutButton, { borderColor: theme.colors.error }]}
+          textColor={theme.colors.error}
           contentStyle={styles.buttonContent}
           labelStyle={styles.buttonLabel}
         >
@@ -229,9 +314,9 @@ export default function SettingsScreen() {
         action={{
           label: "Confirm",
           onPress: confirmLogout,
-          textColor: "#fff",
+          textColor: theme.colors.onError,
         }}
-        style={styles.snackbar}
+        style={{ backgroundColor: theme.colors.error }}
       >
         Are you sure you want to logout?
       </Snackbar>
@@ -242,7 +327,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   scrollView: {
     flex: 1,
@@ -255,10 +339,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 8,
-    color: "#666",
   },
   card: {
-    backgroundColor: "#fff",
     borderRadius: 12,
     paddingVertical: 8,
     elevation: 2,
@@ -272,7 +354,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   listDescription: {
-    color: "#666",
+    fontSize: 13,
   },
   pinContainer: {
     paddingHorizontal: 16,
@@ -282,34 +364,28 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 4,
     fontWeight: "500",
-    color: "#333",
   },
   pinInput: {
-    backgroundColor: "#fff",
     marginBottom: 12,
   },
   errorContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 8,
-    backgroundColor: "#ffebee",
     padding: 10,
     borderRadius: 8,
   },
   error: {
-    color: "#ff5252",
     marginLeft: 4,
   },
   successContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 8,
-    backgroundColor: "#e8f5e9",
     padding: 10,
     borderRadius: 8,
   },
   success: {
-    color: "#4caf50",
     marginLeft: 4,
   },
   button: {
@@ -325,11 +401,6 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 20,
-    borderColor: "#ff5252",
     borderRadius: 8,
-  },
-  snackbar: {
-    backgroundColor: "#323232",
-    marginBottom: 20,
   },
 });
