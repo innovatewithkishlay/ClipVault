@@ -12,7 +12,6 @@ import {
   Portal,
   Searchbar,
   Snackbar,
-  Tooltip,
   useTheme,
 } from "react-native-paper";
 import {
@@ -79,22 +78,6 @@ export default function HomeScreen() {
     }, 2000);
   };
 
-  const handleImportClipboard = async () => {
-    const content = await Clipboard.getStringAsync();
-    if (content && content.trim() !== "") {
-      if (!clipsRef.current.some((clip) => clip.text === content)) {
-        const newClip = {
-          id: Date.now().toString(),
-          text: content,
-          timestamp: new Date().toISOString(),
-        };
-        const updatedClips = [newClip, ...clipsRef.current];
-        setClips(updatedClips);
-        await AsyncStorage.setItem(CLIPBOARD_KEY, JSON.stringify(updatedClips));
-      }
-    }
-  };
-
   const handleCopy = async (text: string) => {
     await Clipboard.setStringAsync(text);
     setSnackbarVisible(true);
@@ -136,6 +119,24 @@ export default function HomeScreen() {
           iconColor={theme.colors.onSurface}
           inputStyle={{ color: theme.colors.onSurface }}
         />
+
+        {clips.length > 0 && (
+          <View style={styles.deleteAllRow}>
+            <Button
+              icon="delete"
+              mode="outlined"
+              onPress={() => setDeleteAllDialogVisible(true)}
+              textColor={theme.colors.error}
+              style={[
+                styles.deleteAllButton,
+                { borderColor: theme.colors.error },
+              ]}
+              contentStyle={{ flexDirection: "row-reverse" }}
+            >
+              Delete All
+            </Button>
+          </View>
+        )}
 
         {loading ? (
           <View style={styles.loadingContainer}>
@@ -185,50 +186,6 @@ export default function HomeScreen() {
               </View>
             }
           />
-        )}
-
-        <Tooltip title="Import current clipboard">
-          <IconButton
-            icon="clipboard-arrow-down"
-            style={[
-              styles.importFab,
-              {
-                bottom: 24 + insets.bottom,
-                left: 24,
-                backgroundColor: theme.colors.surface,
-                borderWidth: 1,
-                borderColor: theme.colors.outline,
-              },
-            ]}
-            size={32}
-            iconColor={theme.colors.primary}
-            onPress={handleImportClipboard}
-            mode="contained"
-            accessibilityLabel="Import clipboard"
-          />
-        </Tooltip>
-
-        {clips.length > 0 && (
-          <Tooltip title="Delete all clipboard items">
-            <IconButton
-              icon="delete"
-              style={[
-                styles.fab,
-                {
-                  bottom: 24 + insets.bottom,
-                  right: 24,
-                  backgroundColor: theme.colors.surface,
-                  borderWidth: 1,
-                  borderColor: theme.colors.outline,
-                },
-              ]}
-              size={32}
-              iconColor={theme.colors.error}
-              onPress={() => setDeleteAllDialogVisible(true)}
-              mode="contained"
-              accessibilityLabel="Delete all clips"
-            />
-          </Tooltip>
         )}
 
         {/* Delete All Confirmation Dialog */}
@@ -284,6 +241,19 @@ const styles = StyleSheet.create({
   searchbar: {
     margin: 10,
   },
+  deleteAllRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginHorizontal: 16,
+    marginBottom: 4,
+  },
+  deleteAllButton: {
+    borderRadius: 24,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
@@ -300,15 +270,5 @@ const styles = StyleSheet.create({
     height: 40,
     alignSelf: "center",
     marginBottom: 10,
-  },
-  fab: {
-    position: "absolute",
-    elevation: 4,
-    borderRadius: 28,
-  },
-  importFab: {
-    position: "absolute",
-    elevation: 4,
-    borderRadius: 28,
   },
 });
