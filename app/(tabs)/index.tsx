@@ -77,9 +77,12 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Appbar with conditional delete icon */}
       <Appbar.Header>
         <Appbar.Content title="ClipVault" />
-        <Appbar.Action icon="delete" onPress={handleClearAll} />
+        {clips.length > 0 && (
+          <Appbar.Action icon="delete" onPress={handleClearAll} />
+        )}
       </Appbar.Header>
 
       <Searchbar
