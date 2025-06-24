@@ -17,7 +17,6 @@ export default function HomeScreen() {
     React.useCallback(() => {
       loadClips();
       setupClipboardListener();
-
       return () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
       };
@@ -77,8 +76,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* REMOVE Appbar.Header! */}
-      {/* Only show the search bar and list */}
       <Searchbar
         placeholder="Search clips..."
         onChangeText={setSearchQuery}
@@ -118,7 +115,6 @@ export default function HomeScreen() {
         />
       )}
 
-      {/* Optional: Show a floating delete button if there are items */}
       {clips.length > 0 && (
         <IconButton
           icon="delete"
@@ -160,7 +156,7 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 24,
-    bottom: 100,
+    bottom: 40,
     backgroundColor: "#fff",
     elevation: 4,
     borderRadius: 28,
