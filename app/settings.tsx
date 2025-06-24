@@ -18,7 +18,10 @@ import {
   TextInput,
   useTheme,
 } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useThemeContext } from "../utils/ThemeContext";
 
 const PIN_KEY = "CLIPVAULT_PIN";
@@ -26,6 +29,7 @@ const PIN_KEY = "CLIPVAULT_PIN";
 export default function SettingsScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isDark, toggleTheme } = useThemeContext();
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
@@ -86,10 +90,13 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["left", "right"]}>
+    <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: 32 + insets.bottom },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <List.Section>
@@ -243,7 +250,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     padding: 16,
-    paddingBottom: 80,
   },
   sectionHeader: {
     fontSize: 14,
@@ -321,7 +327,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderColor: "#ff5252",
     borderRadius: 8,
-    marginBottom: 40,
   },
   snackbar: {
     backgroundColor: "#323232",
