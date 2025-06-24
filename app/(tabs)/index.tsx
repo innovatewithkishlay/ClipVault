@@ -3,7 +3,7 @@ import * as Clipboard from "expo-clipboard";
 import { useFocusEffect } from "expo-router";
 import React, { useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
-import { Appbar, IconButton, List, Searchbar } from "react-native-paper";
+import { IconButton, List, Searchbar } from "react-native-paper";
 
 const CLIPBOARD_KEY = "CLIPBOARD_ITEMS";
 
@@ -77,14 +77,8 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Appbar with conditional delete icon */}
-      <Appbar.Header>
-        <Appbar.Content title="ClipVault" />
-        {clips.length > 0 && (
-          <Appbar.Action icon="delete" onPress={handleClearAll} />
-        )}
-      </Appbar.Header>
-
+      {/* REMOVE Appbar.Header! */}
+      {/* Only show the search bar and list */}
       <Searchbar
         placeholder="Search clips..."
         onChangeText={setSearchQuery}
@@ -123,6 +117,17 @@ export default function HomeScreen() {
           }
         />
       )}
+
+      {/* Optional: Show a floating delete button if there are items */}
+      {clips.length > 0 && (
+        <IconButton
+          icon="delete"
+          style={styles.fab}
+          size={32}
+          onPress={handleClearAll}
+          mode="contained"
+        />
+      )}
     </View>
   );
 }
@@ -151,5 +156,13 @@ const styles = StyleSheet.create({
     height: 40,
     alignSelf: "center",
     marginBottom: 10,
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 100,
+    backgroundColor: "#fff",
+    elevation: 4,
+    borderRadius: 28,
   },
 });
