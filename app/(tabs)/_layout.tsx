@@ -29,7 +29,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Clipboard",
+          title: "ClipVault",
+          headerTitle: "ClipVault",
+          tabBarLabel: "Clipboard",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="content-paste" size={24} color={color} />
           ),
@@ -38,18 +40,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: "ClipVault",
+          headerTitle: "ClipVault",
+          tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="settings" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="explore" size={24} color={color} />
           ),
         }}
       />
