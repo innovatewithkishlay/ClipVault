@@ -3,7 +3,7 @@ import * as Clipboard from "expo-clipboard";
 import { useFocusEffect } from "expo-router";
 import React, { useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
-import { IconButton, List, Searchbar } from "react-native-paper";
+import { IconButton, List, Searchbar, useTheme } from "react-native-paper";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -12,6 +12,7 @@ import {
 const CLIPBOARD_KEY = "CLIPBOARD_ITEMS";
 
 export default function HomeScreen() {
+  const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [clips, setClips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,18 +81,30 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
+      edges={["bottom", "left", "right"]}
+    >
       <View style={styles.container}>
         <Searchbar
           placeholder="Search clips..."
+          placeholderTextColor={theme.colors.onSurfaceVariant}
           onChangeText={setSearchQuery}
           value={searchQuery}
-          style={styles.searchbar}
+          style={[
+            styles.searchbar,
+            {
+              backgroundColor: theme.colors.elevation.level2,
+              color: theme.colors.onSurface,
+            },
+          ]}
+          iconColor={theme.colors.onSurface}
+          inputStyle={{ color: theme.colors.onSurface }}
         />
 
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" />
+            <ActivityIndicator size="large" color={theme.colors.primary} />
           </View>
         ) : (
           <FlatList
@@ -100,22 +113,40 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <List.Item
                 title={item.text}
+                titleStyle={{ color: theme.colors.onBackground }}
                 description={new Date(item.timestamp).toLocaleString()}
-                left={(props) => <List.Icon {...props} icon="content-copy" />}
+                descriptionStyle={{ color: theme.colors.onSurfaceVariant }}
+                left={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon="content-copy"
+                    color={theme.colors.primary}
+                  />
+                )}
                 right={(props) => (
                   <IconButton
                     {...props}
                     icon="delete"
+                    iconColor={theme.colors.error}
                     onPress={() => handleDelete(item.id)}
                   />
                 )}
+                style={{ backgroundColor: theme.colors.elevation?.level1 }}
                 onPress={() => handleCopy(item.text)}
               />
             )}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <List.Icon icon="clipboard-alert" style={styles.emptyIcon} />
-                <List.Subheader>No clipboard items found</List.Subheader>
+                <List.Icon
+                  icon="clipboard-alert"
+                  color={theme.colors.onSurfaceVariant}
+                  style={styles.emptyIcon}
+                />
+                <List.Subheader
+                  style={{ color: theme.colors.onSurfaceVariant }}
+                >
+                  No clipboard items found
+                </List.Subheader>
               </View>
             }
           />
@@ -124,8 +155,15 @@ export default function HomeScreen() {
         {clips.length > 0 && (
           <IconButton
             icon="delete"
-            style={[styles.fab, { bottom: 24 + insets.bottom }]}
+            style={[
+              styles.fab,
+              {
+                bottom: 24 + insets.bottom,
+                backgroundColor: theme.colors.elevation.level3,
+              },
+            ]}
             size={32}
+            iconColor={theme.colors.onPrimary}
             onPress={handleClearAll}
             mode="contained"
           />
@@ -138,11 +176,9 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
   },
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
   },
   searchbar: {
     margin: 10,
@@ -167,7 +203,6 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 24,
-    backgroundColor: "#fff",
     elevation: 4,
     borderRadius: 28,
   },
