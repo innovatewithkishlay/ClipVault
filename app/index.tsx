@@ -11,6 +11,7 @@ import {
   Paragraph,
   Portal,
   Searchbar,
+  Snackbar,
   Tooltip,
   useTheme,
 } from "react-native-paper";
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const clipsRef = useRef(clips);
   const [deleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   useEffect(() => {
     clipsRef.current = clips;
@@ -95,6 +97,7 @@ export default function HomeScreen() {
 
   const handleCopy = async (text: string) => {
     await Clipboard.setStringAsync(text);
+    setSnackbarVisible(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -184,7 +187,6 @@ export default function HomeScreen() {
           />
         )}
 
-        {/* Tooltip wrapped buttons */}
         <Tooltip title="Import current clipboard">
           <IconButton
             icon="clipboard-arrow-down"
@@ -257,6 +259,16 @@ export default function HomeScreen() {
             </Dialog.Actions>
           </Dialog>
         </Portal>
+
+        {/* Snackbar for copy feedback */}
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={2000}
+          style={{ marginBottom: 24 + insets.bottom }}
+        >
+          Text copied successfully!
+        </Snackbar>
       </View>
     </SafeAreaView>
   );
