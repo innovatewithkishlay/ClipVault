@@ -11,6 +11,7 @@ import {
   Paragraph,
   Portal,
   Searchbar,
+  Tooltip,
   useTheme,
 } from "react-native-paper";
 import {
@@ -183,46 +184,49 @@ export default function HomeScreen() {
           />
         )}
 
-        <IconButton
-          icon="clipboard-arrow-down"
-          style={[
-            styles.importFab,
-            {
-              bottom: 24 + insets.bottom,
-              left: 24,
-              backgroundColor: theme.colors.surface,
-              borderWidth: 1,
-              borderColor: theme.colors.outline,
-            },
-          ]}
-          size={32}
-          iconColor={theme.colors.primary}
-          onPress={handleImportClipboard}
-          mode="contained"
-          tooltip="Import clipboard" // Tooltip for long press
-          accessibilityLabel="Import clipboard"
-        />
-
-        {clips.length > 0 && (
+        {/* Tooltip wrapped buttons */}
+        <Tooltip title="Import current clipboard">
           <IconButton
-            icon="delete"
+            icon="clipboard-arrow-down"
             style={[
-              styles.fab,
+              styles.importFab,
               {
                 bottom: 24 + insets.bottom,
-                right: 24,
+                left: 24,
                 backgroundColor: theme.colors.surface,
                 borderWidth: 1,
                 borderColor: theme.colors.outline,
               },
             ]}
             size={32}
-            iconColor={theme.colors.error}
-            onPress={() => setDeleteAllDialogVisible(true)}
+            iconColor={theme.colors.primary}
+            onPress={handleImportClipboard}
             mode="contained"
-            tooltip="Delete all clips" // Tooltip for long press
-            accessibilityLabel="Delete all clips"
+            accessibilityLabel="Import clipboard"
           />
+        </Tooltip>
+
+        {clips.length > 0 && (
+          <Tooltip title="Delete all clipboard items">
+            <IconButton
+              icon="delete"
+              style={[
+                styles.fab,
+                {
+                  bottom: 24 + insets.bottom,
+                  right: 24,
+                  backgroundColor: theme.colors.surface,
+                  borderWidth: 1,
+                  borderColor: theme.colors.outline,
+                },
+              ]}
+              size={32}
+              iconColor={theme.colors.error}
+              onPress={() => setDeleteAllDialogVisible(true)}
+              mode="contained"
+              accessibilityLabel="Delete all clips"
+            />
+          </Tooltip>
         )}
 
         {/* Delete All Confirmation Dialog */}
