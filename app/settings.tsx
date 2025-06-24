@@ -19,13 +19,14 @@ import {
   useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useThemeContext } from "../utils/ThemeContext";
 
 const PIN_KEY = "CLIPVAULT_PIN";
 
 export default function SettingsScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDark, toggleTheme } = useThemeContext();
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [error, setError] = useState("");
@@ -101,9 +102,9 @@ export default function SettingsScreen() {
               titleStyle={styles.listTitle}
               right={() => (
                 <Switch
-                  value={darkMode}
-                  onValueChange={setDarkMode}
-                  thumbColor={darkMode ? theme.colors.primary : "#f4f3f4"}
+                  value={isDark}
+                  onValueChange={toggleTheme}
+                  thumbColor={isDark ? theme.colors.primary : "#f4f3f4"}
                   trackColor={{ false: "#767577", true: theme.colors.primary }}
                 />
               )}
