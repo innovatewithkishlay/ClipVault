@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingBottom: 48,
   },
   sectionHeader: {
     fontSize: 14,
@@ -286,6 +287,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderColor: "#ff5252",
     borderRadius: 8,
+    marginBottom: 28,
   },
   snackbar: {
     backgroundColor: "#323232",
