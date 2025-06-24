@@ -1,14 +1,7 @@
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
-import {
-  Animated,
-  Easing,
-  SafeAreaView,
-  StyleSheet,
-  Switch,
-  View,
-} from "react-native";
+import { Animated, Easing, StyleSheet, Switch, View } from "react-native";
 import {
   Button,
   IconButton,
@@ -18,6 +11,7 @@ import {
   TextInput,
   useTheme,
 } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const PIN_KEY = "CLIPVAULT_PIN";
 
@@ -84,7 +78,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["left", "right", "bottom"]}>
       <View style={styles.outer}>
         <View style={styles.content}>
           <List.Section>
@@ -320,7 +314,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderColor: "#ff5252",
     borderRadius: 8,
-    marginBottom: 36,
+    marginBottom: 24,
   },
   snackbar: {
     backgroundColor: "#323232",
