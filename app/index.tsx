@@ -4,6 +4,10 @@ import { useFocusEffect } from "expo-router";
 import React, { useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { IconButton, List, Searchbar } from "react-native-paper";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const CLIPBOARD_KEY = "CLIPBOARD_ITEMS";
 
@@ -12,6 +16,7 @@ export default function HomeScreen() {
   const [clips, setClips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const insets = useSafeAreaInsets();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -75,60 +80,66 @@ export default function HomeScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <Searchbar
-        placeholder="Search clips..."
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={styles.searchbar}
-      />
-
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : (
-        <FlatList
-          data={filteredClips}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <List.Item
-              title={item.text}
-              description={new Date(item.timestamp).toLocaleString()}
-              left={(props) => <List.Icon {...props} icon="content-copy" />}
-              right={(props) => (
-                <IconButton
-                  {...props}
-                  icon="delete"
-                  onPress={() => handleDelete(item.id)}
-                />
-              )}
-              onPress={() => handleCopy(item.text)}
-            />
-          )}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <List.Icon icon="clipboard-alert" style={styles.emptyIcon} />
-              <List.Subheader>No clipboard items found</List.Subheader>
-            </View>
-          }
+    <SafeAreaView style={styles.safeArea} edges={["bottom", "left", "right"]}>
+      <View style={styles.container}>
+        <Searchbar
+          placeholder="Search clips..."
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          style={styles.searchbar}
         />
-      )}
 
-      {clips.length > 0 && (
-        <IconButton
-          icon="delete"
-          style={styles.fab}
-          size={32}
-          onPress={handleClearAll}
-          mode="contained"
-        />
-      )}
-    </View>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <FlatList
+            data={filteredClips}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <List.Item
+                title={item.text}
+                description={new Date(item.timestamp).toLocaleString()}
+                left={(props) => <List.Icon {...props} icon="content-copy" />}
+                right={(props) => (
+                  <IconButton
+                    {...props}
+                    icon="delete"
+                    onPress={() => handleDelete(item.id)}
+                  />
+                )}
+                onPress={() => handleCopy(item.text)}
+              />
+            )}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <List.Icon icon="clipboard-alert" style={styles.emptyIcon} />
+                <List.Subheader>No clipboard items found</List.Subheader>
+              </View>
+            }
+          />
+        )}
+
+        {clips.length > 0 && (
+          <IconButton
+            icon="delete"
+            style={[styles.fab, { bottom: 24 + insets.bottom }]}
+            size={32}
+            onPress={handleClearAll}
+            mode="contained"
+          />
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
@@ -156,7 +167,6 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 24,
-    bottom: 40,
     backgroundColor: "#fff",
     elevation: 4,
     borderRadius: 28,
