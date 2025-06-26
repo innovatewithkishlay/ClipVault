@@ -4,20 +4,20 @@ import { useFocusEffect } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import {
-  Button,
-  Dialog,
-  IconButton,
-  List,
-  Paragraph,
-  Portal,
-  Searchbar,
-  Snackbar,
-  useTheme,
+    Button,
+    Dialog,
+    List,
+    Paragraph,
+    Portal,
+    Searchbar,
+    Snackbar,
+    useTheme
 } from "react-native-paper";
 import {
-  SafeAreaView,
-  useSafeAreaInsets,
+    SafeAreaView,
+    useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import ClipItem from "../components/ClipItem";
 
 const CLIPBOARD_KEY = "CLIPBOARD_ITEMS";
 
@@ -26,7 +26,7 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [clips, setClips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   const clipsRef = useRef(clips);
   const [deleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
@@ -147,28 +147,10 @@ export default function HomeScreen() {
             data={filteredClips}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <List.Item
-                title={item.text}
-                titleStyle={{ color: theme.colors.onBackground }}
-                description={new Date(item.timestamp).toLocaleString()}
-                descriptionStyle={{ color: theme.colors.onSurfaceVariant }}
-                left={(props) => (
-                  <List.Icon
-                    {...props}
-                    icon="content-copy"
-                    color={theme.colors.primary}
-                  />
-                )}
-                right={(props) => (
-                  <IconButton
-                    {...props}
-                    icon="delete"
-                    iconColor={theme.colors.error}
-                    onPress={() => handleDelete(item.id)}
-                  />
-                )}
-                style={{ backgroundColor: theme.colors.elevation?.level1 }}
-                onPress={() => handleCopy(item.text)}
+              <ClipItem
+                item={item}
+                onCopy={handleCopy}
+                onDelete={handleDelete}
               />
             )}
             ListEmptyComponent={
